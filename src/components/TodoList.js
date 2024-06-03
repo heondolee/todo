@@ -1,78 +1,78 @@
-import React, { useEffect, useState } from "react";
-import CreateTask from "../modals/CreateTask";
-import Card from "./Card";
-import { Box, Button, Typography, Container } from "@mui/material";
+import React, { useEffect, useState } from 'react';
+import CreateTaskPopup from '../modals/CreateTask';
+import Card from './Card';
+import { Box, Button, Typography, Container } from '@mui/material';
 
 const TodoList = () => {
-  const [modal, setModal] = useState(false);
-  const [taskList, setTaskList] = useState([]);
+    const [modal, setModal] = useState(false);
+    const [taskList, setTaskList] = useState([]);
 
-  useEffect(() => {
-    let arr = localStorage.getItem("taskList");
+    useEffect(() => {
+        const storedTasks = localStorage.getItem("taskList");
+        if (storedTasks) {
+            setTaskList(JSON.parse(storedTasks));
+        }
+    }, []);
 
-    if (arr) {
-      let obj = JSON.parse(arr);
-      setTaskList(obj);
-    }
-  }, []);
+    const deleteTask = (index) => {
+        const tempList = taskList.filter((_, i) => i !== index);
+        localStorage.setItem("taskList", JSON.stringify(tempList));
+        setTaskList(tempList);
+    };
 
-  const deleteTask = (index) => {
-    let tempList = taskList;
-    tempList.splice(index, 1);
-    localStorage.setItem("taskList", JSON.stringify(tempList));
-    setTaskList(tempList);
-    window.location.reload();
-  };
+    const updateListArray = (obj, index) => {
+        const tempList = taskList.map((item, i) => (i === index ? obj : item));
+        localStorage.setItem("taskList", JSON.stringify(tempList));
+        setTaskList(tempList);
+    };
 
-  const updateListArray = (obj, index) => {
-    let tempList = taskList;
-    tempList[index] = obj;
-    localStorage.setItem("taskList", JSON.stringify(tempList));
-    setTaskList(tempList);
-    window.location.reload();
-  };
+    const toggle = () => {
+        setModal(!modal);
+    };
 
-  const toggle = () => {
-    setModal(!modal);
-  };
+    const saveTask = (taskObj) => {
+        const tempList = [...taskList, taskObj];
+        localStorage.setItem("taskList", JSON.stringify(tempList));
+        setTaskList(tempList);
+        setModal(false);
+    };
 
-  const saveTask = (taskObj) => {
-    let tempList = taskList;
-    tempList.push(taskObj);
-    localStorage.setItem("taskList", JSON.stringify(tempList));
-    setTaskList(taskList);
-    setModal(false);
-  };
+    const handleComplete = (index) => {
+        const tempList = taskList.map((item, i) => {
+            if (i === index) {
+                return { ...item, Completed: !item.Completed };
+            }
+            return item;
+        });
+        localStorage.setItem("taskList", JSON.stringify(tempList));
+        setTaskList(tempList);
+    };
 
-  return (
-    <>
-      <Container>
-        <Box textAlign="center" mt={2} mb={2}>
-          <Typography variant="h4">Todo List</Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setModal(true)}
-          >
-            Create Task
-          </Button>
-        </Box>
-        <Box display="flex" flexWrap="wrap" justifyContent="center">
-          {taskList &&
-            taskList.map((obj, index) => (
-              <Card
-                key={index}
-                taskObj={obj}
-                index={index}
-                deleteTask={deleteTask}
-                updateListArray={updateListArray}
-              />
-            ))}
-        </Box>
-      </Container>
-      <CreateTask toggle={toggle} modal={modal} save={saveTask} />
-    </>
-  );
+    return (
+        <>
+            <Container>
+                <Box textAlign="center" mt={2} mb={2}>
+                    <Typography variant="h4">Todo List</Typography>
+                    <Button variant="contained" color="primary" onClick={toggle}>
+                        Create Task
+                    </Button>
+                </Box>
+                <Box display="flex" flexWrap="wrap" justifyContent="center">
+                    {taskList && taskList.map((obj, index) => (
+                        <Card
+                            key={index}
+                            taskObj={obj}
+                            index={index}
+                            deleteTask={deleteTask}
+                            updateListArray={updateListArray}
+                            handleComplete={handleComplete}
+                        />
+                    ))}
+                </Box>
+            </Container>
+            <CreateTaskPopup toggle={toggle} modal={modal} save={saveTask} />
+        </>
+    );
 };
 
 export default TodoList;

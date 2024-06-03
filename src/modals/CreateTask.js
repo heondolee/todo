@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const CreateTaskPopup = ({ modal, toggle, save }) => {
     const [taskName, setTaskName] = useState('');
     const [description, setDescription] = useState('');
+    const [category, setCategory] = useState('');
+    const [deadline, setDeadline] = useState(new Date());
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         if (name === "taskName") {
             setTaskName(value);
-        } else {
+        } else if (name === "description") {
             setDescription(value);
+        } else if (name === "category") {
+            setCategory(value);
         }
     };
 
@@ -19,6 +25,8 @@ const CreateTaskPopup = ({ modal, toggle, save }) => {
         let taskObj = {};
         taskObj["Name"] = taskName;
         taskObj["Description"] = description;
+        taskObj["Category"] = category;
+        taskObj["Deadline"] = deadline;
         save(taskObj);
     };
 
@@ -48,6 +56,26 @@ const CreateTaskPopup = ({ modal, toggle, save }) => {
                     onChange={handleChange}
                     name="description"
                     margin="dense"
+                />
+                <FormControl fullWidth margin="dense">
+                    <InputLabel>Category</InputLabel>
+                    <Select
+                        value={category}
+                        onChange={handleChange}
+                        name="category"
+                        label="Category"
+                    >
+                        <MenuItem value="Work">Work</MenuItem>
+                        <MenuItem value="Personal">Personal</MenuItem>
+                        <MenuItem value="Shopping">Shopping</MenuItem>
+                    </Select>
+                </FormControl>
+                <DatePicker
+                    selected={deadline}
+                    onChange={(date) => setDeadline(date)}
+                    showTimeSelect
+                    dateFormat="Pp"
+                    className="datepicker"
                 />
             </DialogContent>
             <DialogActions>
