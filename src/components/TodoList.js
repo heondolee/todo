@@ -4,9 +4,12 @@ import Card from './Card';
 import { Box, Button, Typography, Container } from '@mui/material';
 
 const TodoList = () => {
+    // 할 일 생성 모달의 표시 여부를 제어하는 상태
     const [modal, setModal] = useState(false);
+    // 할 일 목록을 저장하는 상태
     const [taskList, setTaskList] = useState([]);
 
+    // 컴포넌트가 마운트될 때 로컬 스토리지에서 저장된 할 일 목록을 가져옴
     useEffect(() => {
         const storedTasks = localStorage.getItem("taskList");
         if (storedTasks) {
@@ -14,22 +17,26 @@ const TodoList = () => {
         }
     }, []);
 
+    // 할 일을 삭제하는 함수
     const deleteTask = (index) => {
         const tempList = taskList.filter((_, i) => i !== index);
         localStorage.setItem("taskList", JSON.stringify(tempList));
         setTaskList(tempList);
     };
 
+    // 할 일 목록을 업데이트하는 함수
     const updateListArray = (obj, index) => {
         const tempList = taskList.map((item, i) => (i === index ? obj : item));
         localStorage.setItem("taskList", JSON.stringify(tempList));
         setTaskList(tempList);
     };
 
+    // 모달의 표시 여부를 토글하는 함수
     const toggle = () => {
         setModal(!modal);
     };
 
+    // 새로운 할 일을 저장하는 함수
     const saveTask = (taskObj) => {
         const tempList = [...taskList, taskObj];
         localStorage.setItem("taskList", JSON.stringify(tempList));
@@ -37,6 +44,7 @@ const TodoList = () => {
         setModal(false);
     };
 
+    // 할 일의 완료 상태를 토글하는 함수
     const handleComplete = (index) => {
         const tempList = taskList.map((item, i) => {
             if (i === index) {

@@ -5,23 +5,28 @@ import { Box, Button, Typography, Card as MuiCard, CardContent, CardActions, Che
 const Card = ({ taskObj, index, deleteTask, updateListArray, handleComplete }) => {
     const [modal, setModal] = useState(false);
 
+    // 각 카테고리에 대한 색상 설정
     const colors = {
         Work: { primaryColor: "#5D93E1", secondaryColor: "#ECF3FC" },
         Personal: { primaryColor: "#F9D288", secondaryColor: "#FEFAF1" },
         Shopping: { primaryColor: "#5DC250", secondaryColor: "#F2FAF1" }
     };
 
+    // 기본 색상 설정
     const defaultColor = { primaryColor: "#808080", secondaryColor: "#E0E0E0" };
     const taskColor = colors[taskObj?.Category] || defaultColor;
 
+    // 모달의 표시 여부를 토글하는 함수
     const toggle = () => {
         setModal(!modal);
     };
 
+    // 할 일을 업데이트하는 함수
     const updateTask = (obj) => {
         updateListArray(obj, index);
     };
 
+    // 할 일을 삭제하는 함수
     const handleDelete = () => {
         deleteTask(index);
     };

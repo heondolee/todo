@@ -4,11 +4,13 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const CreateTaskPopup = ({ modal, toggle, save }) => {
+    // 각 입력 필드의 상태를 관리
     const [taskName, setTaskName] = useState('');
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
     const [deadline, setDeadline] = useState(new Date());
 
+    // 입력 필드 값이 변경될 때 호출되는 함수
     const handleChange = (e) => {
         const { name, value } = e.target;
         if (name === "taskName") {
@@ -20,6 +22,7 @@ const CreateTaskPopup = ({ modal, toggle, save }) => {
         }
     };
 
+    // 저장 버튼 클릭 시 호출되는 함수
     const handleSave = (e) => {
         e.preventDefault();
         let taskObj = {};
