@@ -34,11 +34,13 @@ const EditTaskPopup = ({ modal, toggle, updateTask, taskObj }) => {
     const handleUpdate = (e) => {
         e.preventDefault();
         let tempObj = {};
+        tempObj['id'] = taskObj.id;
         tempObj['Name'] = taskName;
         tempObj['Description'] = description;
         tempObj['Category'] = category;
         tempObj['Deadline'] = deadline;
         updateTask(tempObj);
+        toggle(); // 모달을 닫음
     };
 
     return (

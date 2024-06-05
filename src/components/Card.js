@@ -23,12 +23,12 @@ const Card = ({ taskObj, index, deleteTask, updateListArray, handleComplete }) =
 
     // 할 일을 업데이트하는 함수
     const updateTask = (obj) => {
-        updateListArray(obj, index);
+        updateListArray(obj, taskObj.id);
     };
 
     // 할 일을 삭제하는 함수
     const handleDelete = () => {
-        deleteTask(index);
+        deleteTask(taskObj.id);
     };
 
     return (
@@ -46,7 +46,7 @@ const Card = ({ taskObj, index, deleteTask, updateListArray, handleComplete }) =
                 </Typography>
             </CardContent>
             <CardActions>
-                <Checkbox checked={taskObj?.Completed || false} onChange={() => handleComplete(index)} />
+                <Checkbox checked={taskObj?.Completed || false} onChange={() => handleComplete(taskObj.id)} />
                 <Button size="small" onClick={toggle} sx={{ color: taskColor.primaryColor }}>
                     Edit
                 </Button>
